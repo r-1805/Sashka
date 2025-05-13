@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>История генерации | ArticleGen</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Стили для корректного отображения сгенерированного текста */
+    .generated-text {
+      white-space: pre-wrap; /* сохраняет переносы строк */
+      max-width: 400px;      /* можно настроить под нужды */
+      overflow-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">ArticleGen</a>
+      <div>
+        <a href="/generate" class="btn btn-outline-primary me-2">Генерация статьи</a>
+        <a href="/logout" class="btn btn-outline-danger">Выйти</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">История генерации</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Дата и время</th>
+          <th>Сырой текст</th>
+          <th>Объем</th>
+          <th>Стиль</th>
+          <th>Аудитория</th>
+          <th>Формат ссылок</th>
+          <th>Сгенерированный текст</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in history %}
+        <tr>
+          <td>{{ entry.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td>{{ entry.raw_text }}</td>
+          <td>{{ entry.word_count }}</td>
+          <td>{{ entry.style }}</td>
+          <td>{{ entry.audience }}</td>
+          <td>{{ entry.references_format }}</td>
+          <td class="generated-text">{{ entry.generated_text|safe }}</td>
+          <td>
+            <a href="{{ url_for('download_word', entry_id=entry.id) }}" class="btn btn-sm btn-outline-secondary mb-1">Скачать DOCX</a>
+            <a href="{{ url_for('download_pdf', entry_id=entry.id) }}" class="btn btn-sm btn-outline-secondary">Скачать PDF</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Генерация статьи | ArticleGen</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 800px;
+      margin-top: 50px;
+    }
+    .header-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #343a40;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand header-title" href="#">ArticleGen</a>
+      <div>
+        <a href="/history" class="btn btn-outline-primary me-2">История</a>
+        <a href="/logout" class="btn btn-outline-danger">Выйти</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="text-center mb-4">Генерация статьи</h2>
+    <form id="generateForm" action="/generate_article" method="post" onsubmit="showLoadingModal()">
+      <div class="mb-4">
+        <label for="raw_text" class="form-label">Сырой текст интервью</label>
+        <textarea class="form-control" id="raw_text" name="raw_text" rows="8" required></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="word_count" class="form-label">Объем статьи</label>
+        <select class="form-select" id="word_count" name="word_count" required>
+          <option value="1000">короткая (1000 слов)</option>
+          <option value="2000" selected>средняя (2000 слов)</option>
+          <option value="3000">длинная (3000 слов)</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="style" class="form-label">Стиль написания</label>
+        <select class="form-select" id="style" name="style" required>
+          <option value="научный" selected>научный</option>
+          <option value="популярный">популярный</option>
+          <option value="деловой">деловой</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="audience" class="form-label">Целевая аудитория</label>
+        <select class="form-select" id="audience" name="audience" required>
+          <option value="эксперты" selected>эксперты</option>
+          <option value="широкая публика">широкая публика</option>
+          <option value="студенты">студенты</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="references_format" class="form-label">Формат ссылок</label>
+        <select class="form-select" id="references_format" name="references_format" required>
+          <option value="APA">APA</option>
+          <option value="ГОСТ" selected>ГОСТ</option>
+          <option value="MLA">MLA</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="journal_link" class="form-label">Ссылка на журнал</label>
+        <input type="url" class="form-control" id="journal_link" name="journal_link" placeholder="Введите ссылку на журнал">
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Сгенерировать статью</button>
+    </form>
+
+    <!-- Модальное окно загрузки -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Загрузка...</span>
+            </div>
+            <p class="mt-3">Пожалуйста, подождите. Мы формируем вашу статью...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Блок для отображения сгенерированной статьи -->
+    <div id="generated_article" class="mt-5">
+      {% if generated_text %}
+        <h3 class="text-center mb-4">Сгенерированная статья</h3>
+        <div class="p-4 bg-light border rounded" id="generated_text_container">
+          <p id="generated_text">{{ generated_text|safe }}</p>
+          <button onclick="copyText()" class="btn btn-outline-secondary mt-3">Копировать текст</button>
+        </div>
+        <script>
+          // Прокрутка к элементу сгенерированного текста
+          document.getElementById("generated_text_container").scrollIntoView({ behavior: 'smooth' });
+        </script>
+      {% endif %}
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function showLoadingModal() {
+      var loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'), {
+        backdrop: 'static',
+        keyboard: false
+      });
+      loadingModal.show();
+    }
+
+    function copyText() {
+      var text = document.getElementById("generated_text").innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        alert("Текст скопирован!");
+      });
+    }
+  </script>
+</body>
+</html>

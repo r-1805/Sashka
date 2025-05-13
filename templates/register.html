@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | ArticleGen</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #343a40;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand header-title" href="#">ArticleGen</a>
+        </div>
+    </nav>
+
+    <div class="container form-container">
+        <h2 class="text-center mb-4">Регистрация</h2>
+        <form action="/register" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Логин</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Подтвердите пароль</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                <div class="invalid-feedback" id="passwordError" style="display: none;">Пароли не совпадают</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+        </form>
+    </div>
+
+    <script>
+        // Проверка совпадения пароля и подтверждения пароля
+        document.getElementById('confirm_password').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            const errorDiv = document.getElementById('passwordError');
+            if (password !== confirmPassword) {
+                errorDiv.style.display = 'block';
+                this.classList.add('is-invalid');
+            } else {
+                errorDiv.style.display = 'none';
+                this.classList.remove('is-invalid');
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
